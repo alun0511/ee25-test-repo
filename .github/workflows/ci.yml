@@ -10,9 +10,20 @@ jobs:
   firmware-build:
     name: Build ESP32 firmware-build
     runs-on: ubuntu-latest
-    steps: 
+    steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - name: Build firmware 
-      run: make Build
-
+    - name: Build firmware
+      run: make build
+    -name: Collect artifacts in artifacts/
+      run: |
+        mkdir -p artifacts
+        mv firmware artifacts
+    -name: Upload artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        path: artifacts
+        name: firmware
+        if-no-files-found: error
+        retention-days: 3
+      
